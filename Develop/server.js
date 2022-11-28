@@ -54,6 +54,27 @@ app.post('/api/notes', (req, res) => {
         // convert the data to a string so we can save it
         const noteString = JSON.stringify(newNote);
 
+        // obtain existing notes
+        fs.readFile('./db/db.json', 'utf8', (err, data) => {
+            if (err) {
+                console.error(err);
+            } else {
+                // convert string into JSON object
+                const parsedNotes = JSON.parse(data);
+  
+                // add a new note
+                parsedNotes.push(newNote);
+
+                // write updated notes back to the file
+                fs.writeFile('./db/db.json', JSON.stringify(parsedNotes, null, 4),
+                (writeErr) =>
+                    writeErr
+                        ? console.error(writeErr)
+                        : console.info('Successfully updated notes!')
+                );
+            }
+        });
+
         // write the string to a file
         fs.writeFile(`./db/db.json`, noteString, (err) =>
         err
