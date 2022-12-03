@@ -4,6 +4,7 @@ const database = require('./db/db.json');
 const fs = require('fs');
 // helper method for generating unique ids
 const uuid = require('./helpers/uuid');
+const { readFromFile, writeToFile, readAndAppend } = require('./helpers/fsUtils');
 
 const PORT = 3001; 
 
@@ -33,6 +34,10 @@ app.get('/api/notes', (req, res) => {
     // sending all reviews to the client
     return res.status(200).json(database);
   });
+
+app.get("/notes/:id", (req, res) => {
+    res.json(notes(req.params.id));
+});
 
 // POST request
 app.post('/api/notes', (req, res) => {
