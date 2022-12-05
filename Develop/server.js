@@ -4,15 +4,16 @@ const database = require('./db/db.json');
 const fs = require('fs');
 // helper method for generating unique ids
 const uuid = require('./helpers/uuid');
-const { readFromFile, writeToFile, readAndAppend } = require('./helpers/fsUtils');
 
-const PORT = 3001; 
+const PORT = 3001;
+var cors = require('cors');
 
 const app = express();
 
 // middleware for parsing application/json and urlencoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use(express.static('public'));
 
@@ -56,9 +57,6 @@ app.post('/api/notes', (req, res) => {
             review_id: uuid(),
         };
 
-        // convert the data to a string so we can save it
-        const noteString = JSON.stringify(newNote);
-
         // obtain existing notes
         fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
@@ -80,14 +78,6 @@ app.post('/api/notes', (req, res) => {
             }
         });
 
-        // write the string to a file
-        fs.writeFile(`./db/db.json`, noteString, (err) =>
-        err
-            ? console.error(err)
-            : console.log(
-                `Note for ${newNote.title} has been written to JSON file`
-            )
-        );
 
         const response = {
             status: 'success',
@@ -101,5 +91,7 @@ app.post('/api/notes', (req, res) => {
     res.status(500).json('Error in posting note');
     }
 });
+
+
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
