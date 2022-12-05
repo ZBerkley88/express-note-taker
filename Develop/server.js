@@ -19,26 +19,32 @@ app.use(express.static('public'));
 
 // returns the index.html file
 app.get('/', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/index.html'))
+  res.sendFile(path.join(__dirname, './public/index.html'))
 );
 
 // returns the notes.html file
 app.get('/notes', (req, res) => 
-    res.sendFile(path.join(__dirname, '/public/notes.html'))
+    res.sendFile(path.join(__dirname, './public/notes.html'))
 );
 
 // returns all saved notes as JSON
 app.get('/api/notes', (req, res) => {
+
+    fs.readFile("./db/db.json", function (err, text) {
+        const dbData = JSON.parse(text);
+        res.json(dbData);
+
     // log our request to the terminal
     console.info(`${req.method} request received to get reviews`);
-  
-    // sending all reviews to the client
-    return res.status(200).json(database);
-  });
+    });
+});
 
 app.get("/notes/:id", (req, res) => {
-    res.json(notes(req.params.id));
+    console.log('log req params', req.params.id);
+    res.json(database[req.params.id]);
 });
+
+
 
 // POST request
 app.post('/api/notes', (req, res) => {
@@ -91,6 +97,20 @@ app.post('/api/notes', (req, res) => {
     res.status(500).json('Error in posting note');
     }
 });
+
+
+
+
+// delete notes
+// app.delete('/api/notes/:id', (req, res) => {
+//     fs.readFile('./db/db.json', 'utf8', (err, data) => {
+//         const dbData = JSON.parse(text);
+
+
+
+//     })
+// });     
+
 
 
 
