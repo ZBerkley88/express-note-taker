@@ -60,7 +60,7 @@ app.post('/api/notes', (req, res) => {
         const newNote = {
             title,
             text,
-            review_id: uuid(),
+            id: uuid(),
         };
 
         // obtain existing notes
@@ -102,14 +102,18 @@ app.post('/api/notes', (req, res) => {
 
 
 // delete notes
-// app.delete('/api/notes/:id', (req, res) => {
-//     fs.readFile('./db/db.json', 'utf8', (err, data) => {
-//         const dbData = JSON.parse(text);
+app.delete('/api/notes/:id', (req, res) => {
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        const dbData = JSON.parse(data);
 
+        const newData = dbData.filter((database) => database.id !== req.params.id);
+        fs.writeFile('./db/db.json', JSON.stringify(newData), (err) => {
+            if (err) console.error(err);
+            res.json(newData);
 
-
-//     })
-// });     
+        })
+    })
+});     
 
 
 
