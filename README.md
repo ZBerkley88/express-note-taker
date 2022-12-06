@@ -2,7 +2,7 @@
 
 Link: [Express Note Taker]()
 
-![Express Note Taker Screenshot](./Develop/public/assets/screenshots/Untitled.png)
+![Express Note Taker Screenshot](./public/assets/screenshots/Untitled.png)
 
 ## Description
 
